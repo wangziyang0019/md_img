@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="springboot-markdown-img:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>springboot-markdown-img</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="springboot-markdown-img-0.0.1.war">
+      <element id="artifact" artifact-name="springboot-markdown-img:war exploded" />
+    </root>
+  </artifact>
+</component>
