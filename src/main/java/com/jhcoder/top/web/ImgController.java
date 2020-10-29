@@ -1,7 +1,9 @@
 package com.jhcoder.top.web;
 
 import com.jhcoder.top.entity.ImgEntity;
+import com.jhcoder.top.mapper.ImgEntityMapper;
 import com.jhcoder.top.mapper.PageBean;
+import com.jhcoder.top.service.ImgService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -20,8 +22,8 @@ import java.util.*;
 @Controller
 public class ImgController {
 
-//    @Autowired
-//    private ImgService imgService;
+    @Autowired
+    private ImgService imgService;
 
     @Autowired
     private Environment env;
@@ -43,13 +45,12 @@ public class ImgController {
 
     @GetMapping("/delete")
     @ResponseBody
-    public String delete(String id) {
-//       ImgEntity imgEntity =  imgService.selectByPrimaryKey(id);
-
-       File file = new File(env.getProperty("img.localpath")+id);
+    public String delete(int id) {
+       ImgEntity imgEntity =  imgService.selectByPrimaryKey(id);
+       File file = new File(imgEntity.getPath());
        if(file.exists()) {
            file.delete();
-//           imgService.deleteByPrimaryKey(id);
+           imgService.deleteByPrimaryKey(id);
        }
         return "success";
     }
@@ -57,27 +58,11 @@ public class ImgController {
     @GetMapping("/pagedata")
     @ResponseBody
     public PageBean pagedata(int pageNum, int pageSize) {
-        ArrayList<ImgEntity> imgEntities = new ArrayList<>();
-        File file = new File(env.getProperty("img.localpath"));
-        File[] fs1 = file.listFiles();
-        for(File first: fs1){
-            //搜索第二层级
-            String secondDirName = first.getPath();
-            File secondDirFile = new File(secondDirName);
-            File[] secondDirList =secondDirFile.listFiles();
-            for(File second: secondDirList){
-                ImgEntity imgEntity = new ImgEntity();
-                imgEntity.setName(second.getName());
-                String replace = second.getAbsolutePath().replace("\\", "/");
-                String pullpath = replace.replace(env.getProperty("img.localpath"), "");
-                imgEntity.setFullpath(pullpath);
-                imgEntity.setId(pullpath);
-                imgEntity.setPath(second.getAbsolutePath());
-                imgEntities.add(imgEntity);
-            }
-        }
-        PageBean<ImgEntity> pageBean = new PageBean<>(imgEntities);
-        pageBean.setList(imgEntities);
+        PageBean<ImgEntity> pageBean = this.imgService.selectPage(pageNum, pageSize);
+//        pageBean.getList().forEach(imgEntity -> {
+//            String all = imgEntity.getFullpath().replaceAll(env.getProperty("img.fullpath") + "/", "");
+//            imgEntity.setFullpath(all);
+//        });
         return pageBean;
     }
 
@@ -137,7 +122,7 @@ public class ImgController {
             imgEntity.setCreat(new Date());
             imgEntity.setPath(localpath);
             imgEntity.setIp(getIpAddr(request));
-//            imgService.insert(imgEntity);
+            imgService.insert(imgEntity);
 
             String full=env.getProperty("img.fullpath") + "/";
             return full+fullpath;
@@ -198,7 +183,7 @@ public class ImgController {
             imgEntity.setCreat(new Date());
             imgEntity.setPath(localpath);
             imgEntity.setIp(getIpAddr(request));
-//            imgService.insert(imgEntity);
+            imgService.insert(imgEntity);
 
         } catch (Exception e) {
             e.printStackTrace();

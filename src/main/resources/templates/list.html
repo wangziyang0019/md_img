@@ -93,7 +93,7 @@
             success:function (data) {
                 var datahtml = "";
                 $.each(data.list,function (i, obj) {
-                    datahtml += "<div class=\"img_item\"><img id=\"image\" class=\"img_in\" src=\""+obj.fullpath+"\" alt=\"Picture\"> <button class=\"btn btn-default btn-xs img_btn\" onclick=\"javascript:deleteImg("+"'"+obj.id+"'"+")\">删除</button></div>";
+                    datahtml += "<div class=\"img_item\"><img id=\"image\" class=\"img_in\" src=\""+obj.fullpath+"\" alt=\"Picture\"> <button class=\"btn btn-default btn-xs img_btn\" onclick=\"javascript:deleteImg("+obj.id+")\">删除</button></div>";
                 })
                 var pages  = data.pages;
                 var prePage = pageNum - 1;
