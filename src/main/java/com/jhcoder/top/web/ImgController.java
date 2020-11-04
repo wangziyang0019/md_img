@@ -68,11 +68,11 @@ public class ImgController {
             for(File second: secondDirList){
                 ImgEntity imgEntity = new ImgEntity();
                 imgEntity.setName(second.getName());
-                String replace = second.getAbsolutePath().replace("\\", "/");
+                String replace = second.getPath().replace("\\", "/");
                 String pullpath = replace.replace(env.getProperty("img.localpath"), "");
                 imgEntity.setFullpath(pullpath);
                 imgEntity.setId(pullpath);
-                imgEntity.setPath(second.getAbsolutePath());
+                imgEntity.setPath(second.getPath());
                 imgEntities.add(imgEntity);
             }
         }
@@ -125,7 +125,7 @@ public class ImgController {
             //fullpath
             String fullpath = folder + "/" + filename;
             //localpath
-            String localpath = env.getProperty("img.localpath")+ "/" + folder+"/"+ filename;
+            String localpath = env.getProperty("img.localpath") + folder+"/"+ filename;
 
             FileUtils.writeByteArrayToFile(new File(localpath), bs);
 
@@ -139,7 +139,7 @@ public class ImgController {
             imgEntity.setIp(getIpAddr(request));
 //            imgService.insert(imgEntity);
 
-            String full=env.getProperty("img.fullpath") + "/";
+            String full=env.getProperty("img.fullpath");
             return full+fullpath;
         }catch (Exception E) {
             return "失败: " + E.getMessage();
@@ -181,7 +181,7 @@ public class ImgController {
         //fullpath
         String fullpath = folder + "/" + filename;
         //localpath
-        String localpath = env.getProperty("img.localpath")+ "/" + folder+"/"+ filename;
+        String localpath = env.getProperty("img.localpath") + folder+"/"+ filename;
 
         try {
             // Get the file and save it somewhere
@@ -205,7 +205,7 @@ public class ImgController {
             result.put("msg","文件上传失败");
             return result;
         }
-        String full=env.getProperty("img.fullpath") + "/";
+        String full=env.getProperty("img.fullpath");
         result.put("msg",full+fullpath);
         return result;
     }
